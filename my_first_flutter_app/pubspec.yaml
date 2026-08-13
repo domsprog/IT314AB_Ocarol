@@ -58,6 +58,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/batman.jpg
+    - assets/images/meepo.jpg
+    - assets/images/bard.jpg
+    - assets/images/fat.jpg
+    - assets/images/tuglife.jpg
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -10,49 +10,115 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My First Flutter Application',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 213, 230, 214),
         ),
         scaffoldBackgroundColor: const Color.fromARGB(255, 3, 3, 3),
       ),
-      home: const MyHomePage(title: 'My First Flutter Application'),
+     home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
+const MyHomePage({super.key});
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+class Profile {
+  String? name;
+  String? course;
+  int? age;
+  double? height;
+  String? hobby;
+  String? image;
+  bool studentstatus = true;
+
+  Profile({
+     this.name,
+     this.course,
+     this.age,
+   this.height,
+   this.hobby,
+   this.image,
+    required this.studentstatus,
+  });
+}
+
 class _MyHomePageState extends State<MyHomePage> {
+  final String imagePath = 'assets/images/meepo.jpg';
+  final String imagePath2 = 'assets/images/batman.jpg';
+
+  Profile profile = Profile(
+    name: 'Dominic Ocarol',
+    course: 'BSIT 3 - 1',
+    age: 23,
+    height: 5.11,
+    image: 'assets/images/batman.jpg',
+    studentstatus: true,
+  );
+
+  Profile profile1 = Profile(
+    name: 'John Doe',
+    age: 26,
+    height: 4.11,
+    hobby: 'Watching Anime and Playing Games',
+    image: 'assets/images/meepo.jpg',
+    studentstatus: true,
+  );
+
+  Profile profile2 = Profile(
+    course: 'BSIT 4 - 1',
+    age: 24,
+    height: 6.11,
+    hobby: 'Coffe Lover',
+    image: 'assets/images/meepo.jpg',
+    studentstatus: true,
+  );
+  Profile profile3 = Profile(
+    name: 'Michael Lee',
+    course: 'BSIT 4 - 3',
+    age: 26,
+    height: 5.09,
+    hobby: 'Coding and cooking',
+    image: 'assets/images/meepo.jpg',
+    studentstatus: true,
+  );
+
+  Profile profile4 = Profile(
+    name: 'Nicol  Cruz',
+    course: 'BSIT 1 - 1',
+    age: 18,
+    height: 4.11,
+    hobby: 'Music and Gaming',
+    image: 'assets/images/meepo.jpg',
+    studentstatus: true,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.title,
+          'Student List',
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.center,
         ),
-        backgroundColor: const Color.fromARGB(255, 3, 3, 3),
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       ),
 
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          //Application Title
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children:[
+                      //Application Title
           const Text(
-            'Welcome to My First Flutter Application\n',
+            'Student List\n',
             style: TextStyle(
               fontSize: 24,
               color: Colors.white,
@@ -60,112 +126,113 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             textAlign: TextAlign.center,
           ),
-
           const SizedBox(height: 20),
 
-          CircleAvatar(
-            radius: 100,
-            backgroundColor: Colors.white,
-            backgroundImage: const AssetImage('assets/images/batman.jpg'),
-          ),
-
-          const SizedBox(height: 20),
-
-          // Name and Course
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Dominic Ocarol\n',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+          //Profile Card 1
+        Card(
+            color: const Color.fromARGB(255, 255, 255, 255),
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                backgroundImage: const AssetImage('assets/images/batman.jpg'),
               ),
-              const SizedBox(width: 20),
-
-              const Text(
-                'BSIT 3 - 1\n',
-                style: TextStyle(fontSize: 20, color: Colors.white),
+              title: Text(
+                profile.name??'Unknown',
+                style: const TextStyle(color: Colors.black),
               ),
-            ],
-          ),
-
-          const SizedBox(height: 10),
-
-          // Hobby
-          const Text(
-            'Hobby: Playing Video Games, Watching Movies, and Reading Books\n',
-            style: TextStyle(fontSize: 24, color: Colors.white),
-            textAlign: TextAlign.center,
-          ),
-
-          const SizedBox(height: 5),
-
-          // Date
-          const Text(
-            'June 6, 2024',
-            style: TextStyle(fontSize: 15, color: Colors.white),
-
-            textAlign: TextAlign.center,
-          ),
-
-          const SizedBox(height: 20),
-
-          // Favorite Game
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: const [
-                  Text(
-                    'My favorite game is:  Dota2 , Valorant',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 20),
-
-          // Favorite Movie and Food
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                'My favorite movie is: The Dark Knight\n',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
+              subtitle: Text(
+                'Course: ${profile.course??'Unknown'}\nAge: ${profile.age??'Unknown'}\nHeight: ${profile.height??'Unknown'}\nHobby: ${profile.hobby??'Unknown'}\nStudent Status: ${profile.studentstatus ? 'Active' : 'Inactive'}',
+                style: const TextStyle(color: Colors.black),
               ),
             ),
           ),
+          const SizedBox(height: 20),
 
-          // Favorite Food
+          //Profile Card 2
           Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                'My favorite Food is: Adobo\n',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+            color: const Color.fromARGB(255, 255, 255, 255),
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.white,
+                backgroundImage: const AssetImage('assets/images/tuglife.jpg'),
+              ),
+              title: Text(
+                profile1.name??'Unknown',
+                style: const TextStyle(color: Colors.black),
+              ),
+              subtitle: Text(
+                'Course: ${profile1.course??'Unknown'}\nAge: ${profile1.age??'Unknown'}\nHeight: ${profile1.height??'Unknown'}\nHobby: ${profile1.hobby??'Unknown'}\nStudent Status: ${profile1.studentstatus ? 'Active' : 'Inactive'}',
+                style: const TextStyle(color: Colors.black),
               ),
             ),
           ),
+          const SizedBox(height: 20),
 
-          
-        ],
+          //Profile Card 3    
+          Card(
+            color: const Color.fromARGB(255, 255, 255, 255),
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                backgroundImage: const AssetImage('assets/images/bard.jpg'),
+              ),
+              title: Text(
+                profile2.name??'Unknown',
+                style: const TextStyle(color: Colors.black),
+              ),
+              subtitle: Text(
+                'Course: ${profile2.course??'Unknown'}\nAge: ${profile2.age??'Unknown'}\nHeight: ${profile2.height??'Unknown'}\nHobby: ${profile2.hobby??'Unknown'  }\nStudent Status: ${profile2.studentstatus ? 'Active' : 'Inactive'}',
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          //Profile Card 4
+          Card(
+            color: const Color.fromARGB(255, 255, 255, 255),
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.white,
+                backgroundImage: const AssetImage('assets/images/fat.jpg'),
+              ),
+              title: Text(
+                profile3.name??'Unknown',
+                style: const TextStyle(color: Colors.black),
+              ),
+              subtitle: Text(
+                'Course: ${profile3.course??'Unknown'}\nAge: ${profile3.age??'Unknown'}\nHeight: ${profile3.height??'Unknown'}\nHobby: ${profile3.hobby??'Unknown'}\nStudent Status: ${profile3.studentstatus ? 'Active' : 'Inactive'}',
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+
+           //Profile Card 5
+          Card(
+            color: const Color.fromARGB(255, 255, 255, 255),
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.white,
+                backgroundImage: const AssetImage('assets/images/meepo.jpg'),
+              ),
+              title: Text(
+                profile4.name??'Unknown',
+                style: const TextStyle(color: Colors.black),
+              ),
+              subtitle: Text(
+                'Course: ${profile4.course??'Unknown'}\nAge: ${profile4.age??'Unknown'}\nHeight: ${profile4.height??'Unknown'}\nHobby: ${profile4.hobby??'Unknown'}\nStudent Status: ${profile4.studentstatus ? 'Active' : 'Inactive'}',
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+          ),
+          ]//cards 
+        )//
       ),
     );
   }
