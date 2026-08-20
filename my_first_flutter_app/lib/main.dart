@@ -39,6 +39,7 @@ class Profile {
   String? image;
   bool studentstatus = true;
   String? favoriteSubject;
+  bool isFavorite;
 
   Profile({
     this.studentId,
@@ -51,6 +52,7 @@ class Profile {
     this.image,
     required this.studentstatus,
     this.favoriteSubject,
+    this.isFavorite = false,
   });
 }
 
@@ -135,7 +137,6 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   ];
 
-  // FLAG 7: Sort students alphabetically by name
   void sortStudentsByName() {
     profiles.sort((a, b) {
       return (a.name ?? '').compareTo(b.name ?? '');
@@ -148,20 +149,14 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text(
           'Student List',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.black,
 
         // Sort button
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.sort_by_alpha,
-              color: Colors.white,
-            ),
+            icon: const Icon(Icons.sort_by_alpha, color: Colors.white),
             onPressed: () {
               setState(() {
                 sortStudentsByName();
@@ -185,41 +180,143 @@ class _MyHomePageState extends State<MyHomePage> {
           : ListView.builder(
               padding: const EdgeInsets.all(10),
               itemCount: profiles.length,
-
               itemBuilder: (context, index) {
                 Profile profile = profiles[index];
 
-                return Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.black,
-                      backgroundImage: AssetImage(
-                        profile.image ?? 'assets/images/meepo.jpg',
-                      ),
-                    ),
+                return InkWell(
+                  onTap: () {
+                    print('${profile.name} card was tapped');
+                  },
+                  child: Card(
+                    color: Colors.white,
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.black,
+                                backgroundImage: AssetImage(
+                                  profile.image ?? 'assets/images/meepo.jpg',
+                                ),
+                              ),
 
-                    title: Text(
-                      profile.name ?? 'Unknown',
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                              const SizedBox(width: 15),
 
-                    subtitle: Text(
-                      'Student ID: ${profile.studentId ?? 'Unknown'}\n'
-                      'Email: ${profile.email ?? 'Unknown'}\n'
-                      'Course: ${profile.course ?? 'Unknown'}\n'
-                      'Age: ${profile.age ?? 'Unknown'}\n'
-                      'Height: ${profile.height ?? 'Unknown'}\n'
-                      'Hobby: ${profile.hobby ?? 'Unknown'}\n'
-                      'Favorite Subject: ${profile.favoriteSubject ?? 'Unknown'}\n'
-                      'Student Status: '
-                      '${profile.studentstatus ? 'Active' : 'Inactive'}',
-                      style: const TextStyle(
-                        color: Colors.black,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      profile.name ?? 'Unknown',
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 5),
+
+                                    Text(
+                                      'Student ID: '
+                                      '${profile.studentId ?? 'Unknown'}\n'
+                                      'Email: '
+                                      '${profile.email ?? 'Unknown'}\n'
+                                      'Course: '
+                                      '${profile.course ?? 'Unknown'}\n'
+                                      'Age: '
+                                      '${profile.age ?? 'Unknown'}\n'
+                                      'Height: '
+                                      '${profile.height ?? 'Unknown'}\n'
+                                      'Hobby: '
+                                      '${profile.hobby ?? 'Unknown'}\n'
+                                      'Favorite Subject: '
+                                      '${profile.favoriteSubject ?? 'Unknown'}\n'
+                                      'Student Status: '
+                                      '${profile.studentstatus ? 'Active' : 'Inactive'}',
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                            IconButton(
+                                tooltip: profile.isFavorite
+                                    ? 'Remove from favorites'
+                                    : 'Add to favorites',
+                                onPressed: () {
+                                  setState(() {
+                                    profile.isFavorite = !profile.isFavorite;
+                                  });
+                                },
+                                icon: Icon(
+                                  color: Colors.amber,
+                                  profile.isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+
+                              IconButton(
+                                tooltip: 'Edit',
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: const Text('Edit Student'),
+                                        content: Text(
+                                          'Editing ${profile.name}',
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                icon: const Icon(Icons.edit),
+                              ),
+
+                              const SizedBox(width:10),
+
+                              IconButton(
+                                tooltip: 'Delete',
+                                onPressed: () {
+                                  setState(() {
+                                    profiles.removeAt(index);
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
