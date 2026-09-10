@@ -135,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void reloadStudentList(){
+  void reloadStudentList() {
     setState(() {
       isloading = true;
     });
@@ -175,15 +175,13 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       body: isloading
-      ? Center(                         
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(color: Colors.blue),
-          ],
-        ),
-      )
-      : profiles.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [CircularProgressIndicator(color: Colors.blue)],
+              ),
+            )
+          : profiles.isEmpty
           ? Center(
               child: Text(
                 'Student list not found.',
