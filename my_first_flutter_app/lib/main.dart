@@ -9,15 +9,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 213, 230, 214),
-        ),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 3, 3, 3),
-      ),
-      home: const MyHomePage(),
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: MyHomePage());
   }
 }
 
@@ -67,10 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
       height: 5.11,
       image: 'assets/images/batman.jpg',
       hobby: 'Playing Games and Watching Anime',
-      studentstatus: true,
+      studentstatus: false,
       favoriteSubject: 'History',
     ),
-
     Profile(
       studentId: '324567',
       name: 'John Doe',
@@ -80,10 +71,9 @@ class _MyHomePageState extends State<MyHomePage> {
       height: 4.11,
       hobby: 'Watching Anime and Playing Games',
       image: 'assets/images/meepo.jpg',
-      studentstatus: true,
+      studentstatus: false,
       favoriteSubject: 'IT 423',
     ),
-
     Profile(
       studentId: '097125',
       name: 'Jane Smith',
@@ -96,7 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
       studentstatus: true,
       favoriteSubject: 'COMP 563',
     ),
-
     Profile(
       studentId: '452891',
       name: 'Michael Lee',
@@ -109,7 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
       studentstatus: true,
       favoriteSubject: 'IT 203',
     ),
-
     Profile(
       studentId: '023423',
       name: 'Nicol Cruz',
@@ -122,7 +110,6 @@ class _MyHomePageState extends State<MyHomePage> {
       studentstatus: true,
       favoriteSubject: 'IT 101',
     ),
-
     Profile(
       studentId: '452215',
       name: 'Ikon Cruz',
@@ -136,6 +123,28 @@ class _MyHomePageState extends State<MyHomePage> {
       favoriteSubject: 'MATH 101',
     ),
   ];
+
+  bool isloading = true;
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        isloading = false;
+      });
+    });
+  }
+
+  void reloadStudentList(){
+    setState(() {
+      isloading = true;
+    });
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        isloading = false;
+      });
+    });
+  }
 
   void sortStudentsByName() {
     profiles.sort((a, b) {
@@ -152,7 +161,6 @@ class _MyHomePageState extends State<MyHomePage> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.black,
-
         // Sort button
         actions: [
           IconButton(
@@ -166,12 +174,21 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
 
-      body: profiles.isEmpty
-          ? const Center(
+      body: isloading
+      ? Center(                         
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(color: Colors.blue),
+          ],
+        ),
+      )
+      : profiles.isEmpty
+          ? Center(
               child: Text(
                 'Student list not found.',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -182,14 +199,10 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: profiles.length,
               itemBuilder: (context, index) {
                 Profile profile = profiles[index];
-
                 return InkWell(
-                  onTap: () {
-                    print('${profile.name} card was tapped');
-                  },
                   child: Card(
                     color: Colors.white,
-                    margin: const EdgeInsets.only(bottom: 10),
+                    margin: const EdgeInsets.only(bottom: 20),
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(
@@ -205,24 +218,21 @@ class _MyHomePageState extends State<MyHomePage> {
                                   profile.image ?? 'assets/images/meepo.jpg',
                                 ),
                               ),
-
-                              const SizedBox(width: 15),
-
+                              SizedBox(width: 15),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       profile.name ?? 'Unknown',
-                                      style: const TextStyle(
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                       ),
                                     ),
-
-                                    const SizedBox(height: 5),
-
+                                    SizedBox(height: 5),
                                     Text(
                                       'Student ID: '
                                       '${profile.studentId ?? 'Unknown'}\n'
@@ -237,26 +247,41 @@ class _MyHomePageState extends State<MyHomePage> {
                                       'Hobby: '
                                       '${profile.hobby ?? 'Unknown'}\n'
                                       'Favorite Subject: '
-                                      '${profile.favoriteSubject ?? 'Unknown'}\n'
-                                      'Student Status: '
-                                      '${profile.studentstatus ? 'Active' : 'Inactive'}',
+                                      '${profile.favoriteSubject ?? 'Unknown'}',
+                                      textAlign: TextAlign.center,
                                       style: const TextStyle(
                                         color: Colors.black,
+                                        fontSize: 14,
                                       ),
                                     ),
+                                    if (profile.studentstatus)
+                                      Text(
+                                        'Active Student',
+                                        style: TextStyle(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      )
+                                    else
+                                      Text(
+                                        'Inactive Student',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
-
-                          const SizedBox(height: 10),
-
+                          SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-
-                            IconButton(
+                              IconButton(
                                 tooltip: profile.isFavorite
                                     ? 'Remove from favorites'
                                     : 'Add to favorites',
@@ -272,8 +297,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       : Icons.favorite_border,
                                 ),
                               ),
-                              const SizedBox(width: 10),
-
+                              SizedBox(width: 10),
                               IconButton(
                                 tooltip: 'Edit',
                                 onPressed: () {
@@ -299,9 +323,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 },
                                 icon: const Icon(Icons.edit),
                               ),
-
-                              const SizedBox(width:10),
-
+                              SizedBox(width: 10),
                               IconButton(
                                 tooltip: 'Delete',
                                 onPressed: () {
@@ -309,10 +331,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                     profiles.removeAt(index);
                                   });
                                 },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ),
+                                icon: Icon(Icons.delete, color: Colors.red),
+                              ),
+                              SizedBox(width: 10),
+                              IconButton(
+                                icon: Icon(Icons.refresh, color: Colors.blue),
+                                tooltip: 'Reload Students list',
+                                onPressed: () {
+                                  reloadStudentList();
+                                },
                               ),
                             ],
                           ),
