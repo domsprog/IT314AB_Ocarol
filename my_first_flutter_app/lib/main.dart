@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'student_details.dart';
+import 'student_list.dart';
+import 'student_add.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,7 +12,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: MyHomePage());
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/student-list',
+      routes: {
+        '/student-list': (context) => const MyHomePage(),
+        '/add-student': (context) => AddStudent(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/student-details') {
+          final profile = settings.arguments as Profile;
+          return MaterialPageRoute(
+            builder: (context) => StudentDetails(profile: profile),
+          );
+        }
+        return null;
+      },
+    );
   }
 }
 
@@ -155,6 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black26,
       appBar: AppBar(
         title: const Text(
           'Student List',
@@ -171,183 +191,31 @@ class _MyHomePageState extends State<MyHomePage> {
               });
             },
           ),
+          IconButton(
+            icon: Icon(Icons.refresh, color: Colors.white),
+            tooltip: 'Reload Students list',
+            onPressed: () {
+              reloadStudentList();
+            },
+          ),
         ],
       ),
-
-      body: isloading
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [CircularProgressIndicator(color: Colors.blue)],
-              ),
-            )
-          : profiles.isEmpty
-          ? Center(
-              child: Text(
-                'Student list not found.',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.all(10),
-              itemCount: profiles.length,
-              itemBuilder: (context, index) {
-                Profile profile = profiles[index];
-                return InkWell(
-                  child: Card(
-                    color: Colors.white,
-                    margin: const EdgeInsets.only(bottom: 20),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: Colors.black,
-                                backgroundImage: AssetImage(
-                                  profile.image ?? 'assets/images/meepo.jpg',
-                                ),
-                              ),
-                              SizedBox(width: 15),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      profile.name ?? 'Unknown',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    SizedBox(height: 5),
-                                    Text(
-                                      'Student ID: '
-                                      '${profile.studentId ?? 'Unknown'}\n'
-                                      'Email: '
-                                      '${profile.email ?? 'Unknown'}\n'
-                                      'Course: '
-                                      '${profile.course ?? 'Unknown'}\n'
-                                      'Age: '
-                                      '${profile.age ?? 'Unknown'}\n'
-                                      'Height: '
-                                      '${profile.height ?? 'Unknown'}\n'
-                                      'Hobby: '
-                                      '${profile.hobby ?? 'Unknown'}\n'
-                                      'Favorite Subject: '
-                                      '${profile.favoriteSubject ?? 'Unknown'}',
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    if (profile.studentstatus)
-                                      Text(
-                                        'Active Student',
-                                        style: TextStyle(
-                                          color: Colors.green,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
-                                      )
-                                    else
-                                      Text(
-                                        'Inactive Student',
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                tooltip: profile.isFavorite
-                                    ? 'Remove from favorites'
-                                    : 'Add to favorites',
-                                onPressed: () {
-                                  setState(() {
-                                    profile.isFavorite = !profile.isFavorite;
-                                  });
-                                },
-                                icon: Icon(
-                                  color: Colors.amber,
-                                  profile.isFavorite
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              IconButton(
-                                tooltip: 'Edit',
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: const Text('Edit Student'),
-                                        content: Text(
-                                          'Editing ${profile.name}',
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('OK'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                icon: const Icon(Icons.edit),
-                              ),
-                              SizedBox(width: 10),
-                              IconButton(
-                                tooltip: 'Delete',
-                                onPressed: () {
-                                  setState(() {
-                                    profiles.removeAt(index);
-                                  });
-                                },
-                                icon: Icon(Icons.delete, color: Colors.red),
-                              ),
-                              SizedBox(width: 10),
-                              IconButton(
-                                icon: Icon(Icons.refresh, color: Colors.blue),
-                                tooltip: 'Reload Students list',
-                                onPressed: () {
-                                  reloadStudentList();
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
+      body: StudentList(
+        profiles: profiles,
+        isloading: isloading,
+        reloadStudentList: reloadStudentList,
+        deleteStudent: (index) {
+          setState(() {
+            profiles.removeAt(index);
+          });
+        },
+        editStudent: (index) {},
+        isFavorite: (index) {
+          setState(() {
+            profiles[index].isFavorite = !profiles[index].isFavorite;
+          });
+        },
+      ),
     );
   }
 }
