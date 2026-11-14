@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'student_details.dart';
 import 'student_list.dart';
 import 'student_add.dart';
@@ -65,6 +67,38 @@ class Profile {
     this.favoriteSubject,
     this.isFavorite = false,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'studentId': studentId,
+      'name': name,
+      'email': email,
+      'course': course,
+      'age': age,
+      'height': height,
+      'hobby': hobby,
+      'image': image,
+      'studentstatus': studentstatus,
+      'favoriteSubject': favoriteSubject,
+      'isFavorite': isFavorite,
+    };
+  }
+
+  factory Profile.fromJson(Map<String, dynamic> json) {
+    return Profile(
+      studentId: json['studentId'],
+      name: json['name'],
+      email: json['email'],
+      course: json['course'],
+      age: json['age'],
+      height: (json['height'] as num?)?.toDouble(),
+      hobby: json['hobby'],
+      image: json['image'],
+      studentstatus: json['studentstatus'] ?? true,
+      favoriteSubject: json['favoriteSubject'],
+      isFavorite: json['isFavorite'] ?? false,
+    );
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -144,14 +178,37 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   bool isloading = true;
+
   @override
   void initState() {
     super.initState();
+    loadStudents();
     Future.delayed(Duration(seconds: 2), () {
       setState(() {
         isloading = false;
       });
     });
+  }
+
+  // Save the whole list on the phone
+  Future<void> saveStudents() async {
+    final prefs = await SharedPreferences.getInstance();
+    final data = profiles.map((p) => p.toJson()).toList();
+    await prefs.setString('students', jsonEncode(data));
+  }
+
+  // Load the saved list when the app starts
+  Future<void> loadStudents() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString('students');
+
+    // If nothing was saved yet, we keep the default students
+    if (saved != null) {
+      final List data = jsonDecode(saved);
+      setState(() {
+        profiles = data.map((item) => Profile.fromJson(item)).toList();
+      });
+    }
   }
 
   bool addStudentWithoutDuplicate(Profile newStudent) {
@@ -202,11 +259,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 context,
                 MaterialPageRoute(builder: (context) => AddStudent()),
               );
-
               if (newStudent != null) {
                 setState(() {
                   profiles.add(newStudent as Profile);
                 });
+                saveStudents();
               }
             },
             icon: Icon(Icons.add, color: Colors.white),
@@ -238,7 +295,10 @@ class _MyHomePageState extends State<MyHomePage> {
             profiles.removeAt(index);
           });
         },
-        editStudent: (index) {},
+        editStudent: (index) {
+          setState(() {});
+          saveStudents();
+        },
         isFavorite: (index) {
           setState(() {
             profiles[index].isFavorite = !profiles[index].isFavorite;

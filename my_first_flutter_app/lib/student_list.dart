@@ -45,12 +45,13 @@ class StudentList extends StatelessWidget {
             itemBuilder: (context, index) {
               Profile profile = profiles[index];
               return InkWell(
-                onTap: () {
-                  Navigator.pushNamed(
+                onTap: () async {
+                  await Navigator.pushNamed(
                     context,
                     '/student-details',
                     arguments: profile,
                   );
+                  editStudent(index);
                 },
                 child: Card(
                   color: Colors.white,
