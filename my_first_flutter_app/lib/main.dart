@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Profile> profiles = [
     Profile(
       studentId: '125690',
-      name: 'Dominic Ocarol',
+      name: 'Doms  Ocarol',
       email: 'dominic@email.com',
       course: 'BSIT 3 - 1',
       age: 23,
@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
     Profile(
       studentId: '324567',
-      name: 'John Doe',
+      name: 'John dominic',
       email: 'john@email.com',
       course: 'BSIT 4 - 2',
       age: 26,
@@ -154,6 +154,18 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  bool addStudentWithoutDuplicate(Profile newStudent) {
+    final isDuplicate = profiles.any(
+      (p) => p.studentId == newStudent.studentId,
+    );
+    if (isDuplicate) return false;
+
+    setState(() {
+      profiles.add(newStudent);
+    });
+    return true;
+  }
+
   void reloadStudentList() {
     setState(() {
       isloading = true;
@@ -183,6 +195,17 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.black,
         // Sort button
         actions: [
+          IconButton(
+            tooltip: 'Add',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddStudent()),
+              );
+            },
+            icon: Icon(Icons.add, color: Colors.white),
+          ),
+
           IconButton(
             icon: const Icon(Icons.sort_by_alpha, color: Colors.white),
             onPressed: () {

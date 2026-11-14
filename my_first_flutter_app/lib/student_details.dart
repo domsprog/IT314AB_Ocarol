@@ -11,6 +11,7 @@ class StudentDetails extends StatelessWidget {
       backgroundColor: Colors.black26,
       appBar: AppBar(
         backgroundColor: Colors.black,
+       iconTheme: IconThemeData(color: Colors.white),
         title: const Text(
           'Student Details',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

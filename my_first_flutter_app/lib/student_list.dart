@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
-import 'student_add.dart';
 
 class StudentList extends StatelessWidget {
   final List<Profile> profiles;
@@ -147,19 +146,6 @@ class StudentList extends StatelessWidget {
                                 deleteStudent(index);
                               },
                               icon: Icon(Icons.delete, color: Colors.red),
-                            ),
-                            SizedBox(width: 10),
-                            IconButton(
-                              tooltip: 'Add',
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AddStudent(),
-                                  ),
-                                );
-                              },
-                              icon: Icon(Icons.person, color: Colors.black),
                             ),
                           ],
                         ),
