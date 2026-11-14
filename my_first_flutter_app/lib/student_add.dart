@@ -51,9 +51,6 @@ class AddStudent extends StatelessWidget {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a student ID';
                         }
-                        // if ( addStudentWithoutDuplicate.contains(value)) {
-                        //   return 'This student ID already exists';
-                        // }
                         return null;
                       },
                     ),
@@ -143,21 +140,28 @@ class AddStudent extends StatelessWidget {
                     ),
 
                     SizedBox(height: 30),
-                    
+
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          String studentId = studentIdController.text;
-                          String name = nameController.text;
-                          String course = courseController.text;
-                          String email = emailController.text;
-                          String year = yearController.text;
+                          Profile newStudent = Profile(
+                            studentId: studentIdController.text,
+                            name: nameController.text,
+                            email: emailController.text,
+                            course:
+                                courseController.text +
+                                ' ' +
+                                yearController.text,
+                            studentstatus: true,
+                          );
 
-                          print('Student ID: $studentId');
-                          print('Name: $name');
-                          print('Course: $course');
-                          print('Email: $email');
-                          print('Year: $year');
+                          studentIdController.clear();
+                          nameController.clear();
+                          courseController.clear();
+                          emailController.clear();
+                          yearController.clear();
+
+                          Navigator.pop(context, newStudent);
                         }
                       },
                       style: ElevatedButton.styleFrom(

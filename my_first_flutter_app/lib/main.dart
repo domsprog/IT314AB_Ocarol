@@ -197,11 +197,17 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           IconButton(
             tooltip: 'Add',
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              final newStudent = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AddStudent()),
               );
+
+              if (newStudent != null) {
+                setState(() {
+                  profiles.add(newStudent as Profile);
+                });
+              }
             },
             icon: Icon(Icons.add, color: Colors.white),
           ),
