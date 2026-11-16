@@ -1,10 +1,7 @@
+
 {
-  "cmake.sourceDirectory": "C:/Users/dominic/my_first_flutter_app/linux",
+  "cmake.sourceDirectory": "C:/Users/dominic/source/repos/IT/IT314AB_Ocarol/IT314AB_Ocarol/IT314AB_Ocarol/my_first_flutter_app/windows/runner",
   "dart.flutterHotReloadOnSave": "all",
   "files.autoSave": "afterDelay",
-  "files.autoSaveDelay": 500,
-  "dart.hotReloadOnSave": "never",
-  "editor.formatOnSave": true,
-  "files.autoSaveWhenNoErrors": false,
-  "editor.fontSize": 12
+  "files.autoSaveDelay": 500
 }
