@@ -1,5 +1,5 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:postgres/postgres.dart';
-
 class DatabaseConnection {
   static Connection? _shared;
 
@@ -10,24 +10,20 @@ class DatabaseConnection {
     return _shared!;
   }
 
-  static Future<Connection> connect() async {
-    final endpoint = Endpoint(
-      host: 'ep-hidden-base-azm2b0td-pooler.c-3.ap-southeast-1.aws.neon.tech',
-      database: 'OcarolSMS',
-      username: 'neondb_owner',
-      password: 'npg_riaof9UIl4nW',
-      port: 5432,
-    );
+ static Future<Connection> connect() async {
+  final endpoint = Endpoint(
+    host: dotenv.env['NEON_HOST']!,
+    database: dotenv.env['NEON_DB']!,
+    username: dotenv.env['NEON_USER']!,
+    password: dotenv.env['NEON_PASSWORD']!,
+    port: int.parse(dotenv.env['NEON_PORT'] ?? '5432'),
+  );
 
-    final connection = await Connection.open(
-      endpoint,
-      settings: const ConnectionSettings(
-        sslMode: SslMode.require,
-      ),
-    );
-
-    return connection;
-  }
+  return Connection.open(
+    endpoint,
+    settings: const ConnectionSettings(sslMode: SslMode.require),
+  );
+}
 
   static Future<void> testConnection() async {
     Connection? connection;

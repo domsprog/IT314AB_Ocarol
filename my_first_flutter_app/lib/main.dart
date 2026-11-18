@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'models/student_model.dart';
 import 'repository/enrollment_repo.dart';
@@ -19,8 +20,9 @@ import 'view/student/student_details.dart';
 import 'view/student/student_list_view.dart';
 import 'view/subject/subject_list_view.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
 
   runApp(
     MultiProvider(
